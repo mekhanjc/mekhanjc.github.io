@@ -4,25 +4,24 @@ title: About
 permalink: /about/
 ---
 
-## Theme Monos
-> Simple and lightweight theme for Jekyll
+## 안녕하세요!
+> 샌드위치를 좋아하는 초보 개발자입니다~
+
+<br>
 
 ### Features
-- Responsive.
-- Syntax Highlight
-- Most optimized theme for tech blog.
-- Lightweight with minimum stylesheet.
-- Easy to customize.
-- Offers category menu.
+- 기계공학 전공
+- 삼성SW아카데미 10기
 
-### _config.yml
+
+<!-- ### _config.yml
 > Code block will look like this.
 ```yml
 highlighter-theme: monokai //you can change your syntax color scheme.
 date_format: "%Y-%M-%D" //and date format.
-```
+``` -->
 
-### Screenshots
+<!-- ### Screenshots
 #### Page
 ![alt text](/public/img/screenshot-1.png)
 #### Articles
@@ -30,4 +29,4 @@ date_format: "%Y-%M-%D" //and date format.
 #### Page - Mobile
 ![alt text](/public/img/screenshot-m1.png)
 #### Page - Articles
-![alt text](/public/img/screenshot-m2.png)
+![alt text](/public/img/screenshot-m2.png) -->
