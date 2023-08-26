@@ -1,0 +1,89 @@
+---
+layout: post
+title:  Java 기초 - 인터페이스
+date:   2023-07-25 19:31:29 +0900
+categories: Java
+---
+인터페이스는 서로 다른 장치들을 연결시켜주는 규격이다. 자바에서는 완벽히 추상화된 설계도를 나타내며, 클래스와 유사하게 작성이 가능하다. class 대신 interface라는 키워드를 사용해야 한다. 인터페이스의 모든 메서드는 추상 메서드이다.
+
+```javascript
+public interface Interface1 {
+    public static final int number1 = 10;
+    public abstract void mathod1(char c);
+}
+```
+
+인터페이스는 구현부가 없기 때문에 그 자체만으로 인스턴스를 생성할 수 없다. 따라서  implements 키워드를 통해 구현클래스를 작성한다.
+
+인터페이스의 상속은 클래스처럼 extends 키워드를 쓰나 클래스 상속과는 달리 여러 개의 인터페이스를 가져오게 할 수 있다.
+
+```javascript
+interface Shape1 {}
+interface Shape2 {}
+
+class Triangle implements Shape1 {}  // 인터페이스를 구현하는 클래스
+
+interface Circle extends Shape1, Shape2 {  // 인터페이스 상속은 다중 상속이 가능
+    // 구현부가 있는 메서드는 default라는 키워드를 작성해야 함
+    // public 접근제한자를 사용해야 함(이건 생략 가능)
+    public default void rolling() {
+    	System.out.print("데굴");
+    }
+    // 클래스의 static과 사용방법이 동일
+    // 인터페이스 이름으로 접근하고, 구현체 class에서 재정의할 수 없음
+    public static void info() {
+        System.out.print("Circle 모양입니다.");  // Circle.info();로 접근
+    }
+}
+```
+
+이렇게 하면 서로 관계가 없는 클래스들에게 인터페이스를 통해 관계를 맺게 할 수 있다. 표준화 처리 및 개발기간 단축, 손쉬운 모듈 교체가 가능해진다.
+
+### 제네릭
+
+다양한 종류의 객체들을 다루는 메서드나 컬렉션 클래스에서 컴파일 시 타입을 체크해주는 기능이다. 객체의 타입 안정성을 제공하고 형변환의 번거로움이 없어져 코드가 간결해진다.
+
+상속관계와 무관하게, 변수와 생성 쪽의 타입이 반드시 일치해야 한다. 추정 가능한 경우엔 생성자 쪽에서 생략이 가능하다.
+
+```javascript
+class Box<T> {  // T는 reference Type을 의미(임의의 참조형 타입)
+    private T obj;
+    
+    public T getObj() {
+    	return obj;
+    }
+    
+    public void setObj(T obj) {
+    	this.obj = obj;
+    }
+}
+
+Box<Child> box1 = new Box<Child>();
+Box<Child> box1 = new Box<>();
+// Box<Parent> box1 = new Box<Child>();는 안 된다.
+
+box1.setObj(new Child());
+Box b = box.getObj();
+```
+
+문자 타입을 명시하였지만 Box<T>처럼 해버리면 모든 타입을 사용할 수 있다. 그래서 구체적인 타입 제한이 필요할 경우 제한된 extends 키워드를 이용할 수 있다. 
+
+```javascript
+class Box<T extends Parent> {}  // Parent의 자손만 타입 지정 가능
+// <T super Child>는 불가능하다...(결국 Object 클래스가 올라가므로 제네릭의 의미가 없음)
+
+class Box<T extends interface1> {}  // 인터페이스도 extends 사용
+class Box<T extends Parent & interface1> {}  // 클래스와 제약 조건을 같이 할 경우 &로 연결
+
+
+// 와일드카드는 구체적인 타입 대신 사용할 수 있다.
+class Box<?> {}  // 타입에 제한 없음
+
+List<? extends Number> foo3 = new ArrayList<Number>();  // Number "extends" Number
+List<? extends Number> foo3 = new ArrayList<Integer>(); // Integer extends Number
+List<? extends Number> foo3 = new ArrayList<Double>();  // Double extends Number
+
+List<? super Integer> foo3 = new ArrayList<Integer>();  // Integer is a "superclass" of Integer
+List<? super Integer> foo3 = new ArrayList<Number>();   // Number is a superclass of Integer
+List<? super Integer> foo3 = new ArrayList<Object>();   // Object is a superclass of Integer
+```

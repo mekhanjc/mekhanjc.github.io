@@ -1,0 +1,50 @@
+---
+layout: post
+title:  Java 기초 - 예외처리
+date:   2023-07-27 19:31:29 +0900
+categories: Java
+---
+ 프로그램의 오류는 어떤 원인에 의해 오동작하거나 비정상적으로 종료되는 경우를 말한다. 발생 시점에 따라 컴파일 에러, 런타임 에러, 논리적 에러로 구분된다. 이 오류는 에러(Error)와 예외(Exception)라는 두 종류로 나뉘는데, 에러는 메모리 부족이나 스택 오버플로우처럼 발생하면 복구할 수 없는 심각한 오류를 말한다. 반면 예외는 클래스 형변환이나 파일 읽기를 실패하는 등 프로그래머가 적절한 코드를 통해 대비할 수 있는 오류를 말한다. 따라서 예외 발생 시에 프로그램의 비정상 종료를 막고 정상적인 실행상태를 유지하기 위해 예외처리를 해줄 필요가 있다.
+
+ 예외 계열에는 RuntimeException 클래스와 Exception 클래스들로 나누어 볼 수 있는데, RuntimeException 클래스는 프로그래머의 실수로 발생하는 unchecked exception 계열이다. 대처 코드가 없어도 컴파일에 문제가 없다. 이들을 제외한 Exception 클래스는 checked exception으로 대처 코드가 없으면 컴파일 진행이 안 된다. 따라서 try ~ catch ~ finally 구문으로 직접 처리하거나 throws 키워드로 간접처리가 필요하다.
+
+-   try ~ catch : 예외에 대한 대비코드를 작성하여 프로그램의 비정상적인 종료를 막고 정상적인 상태를 유지한다. 예외 발생 시 JVM의 예외처리기가 닫아서 처리한다. 다중 예외처리 시에는 주의할 점이 있는데, JVM이 던진 예외는 catch 문장을 찾을 때 다형성이 적용되므로 작은 범위에서 큰 범위 순으로 처리해야 한다.
+-   finally : 예외 발생 여부와 상관 없이 언제나 실행한다. 중간에 return이 있어도 finally 블록 수행 후에 반환한다.
+-   throws : 메서드 선언부에 사용하여 예외를 처리하지 않고 단순히 전달한다. 여러 개일 경우 ,(comma)를 이용하여 나열한다. 메서드 재정의 시에는 조상클래스 메서드가 던지는 예외보다 큰 범위인 부모 예외를 던질 수 없다.
+
+자원을 반납할 때 finally에서 close()를 통해 반납을 하면 코드가 지저분해지고 다른 예외상황을 발생시킬 수 있으므로 자동 자원 반납 구문(try with resources)을 사용하면 좋다. try() 괄호 안에 객체를 생성하는 코드를 작성하면 close()를 호출하지 않아도 try 블록을 벗어나는 순간 close()가 호출된다. 
+
+```javascript
+// 사용자 정의 예외를 작성했는데 Exception 클래스를 상속한다
+public class PersonNotFoundException extends Exception{
+    public PersonNotFoundException(String name) {
+    	// 조상클래스 생성자를 호출하여 매개변수 문자열을 전달하자
+        super(name + "에 해당하는 사람은 없습니다.");
+    }
+}
+
+
+public class UserExceptionTest {
+    public static void main(String[] args) {
+
+        try {  // 일단 실행해
+            getPerson("교사");  
+
+        } catch (PersonNotFoundException e) { 
+        // try 블록 안에서 예외가 발생하면 바로 중단하고 catch 블록 실행
+            e.printStackTrace();  // 발생한 에러 e에 대해 출력
+
+        } finally {  // 예외가 일어났든지 말든지 실행하겠다
+            System.out.println("실행했음")  
+        }
+
+    }
+
+    // 이 메서드는 PersonNotFoundException이라는 예외를 던질 수 있다고 선언
+    public static void getPerson(String name) throws PersonNotFoundException {
+        //"프로그래머"가 입력되면 사용자 정의 예외를 던져보자.
+        if (name.equals("프로그래머"))
+            throw new PersonNotFoundException(name);
+    }
+}
+```

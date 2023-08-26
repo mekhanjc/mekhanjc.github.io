@@ -1,0 +1,42 @@
+---
+layout: post
+title:  Java 기초 - 다형성
+date:   2023-07-24 19:31:29 +0900
+categories: Java
+---
+다형성(多形性, Polymorphism)은 많은 형상을 가질 수 있다는 뜻으로, 상속 관계에 있을 때 조상 클래스의 타입으로 자식 클래스 객체를 참조할 수 있다는 말이다.  
+
+```javascript
+Parent parent = new Child("홍길동", 50, "홍상직");
+// Child child = new Parent("홍길동, 50");은 안 된다...
+
+
+// 조상타입이 자손타입으로 되려면 명시적 형변환을 해야한다.
+// 안 하면 ClassCastException이 일어남
+Parent parent = new Parent();
+Child child = (Child) parent; 
+
+// 반대의 경우엔 묵시적 형변환이 자동으로 이루어질 수 있다.
+Child child = new Child();
+Parent parent = child;
+```
+
+instanceof 연산자를 통해 참조변수가 참조하고 있는 인스턴스의 타입을 확인할 수 있다. 결과는 boolean으로 반환한다. true라면 해당 타입으로 형변환이 가능하다는 뜻이다.
+
+상속관계에서 멤버변수가 중복이 되면 참조변수 타입에 따라 연결이 달라지는데, 메서드가 중복될 때는 무조건 자식클래스의 메서드가 호출된다.
+
+```javascript
+if (parent instanceof Child) {  // Child 타입으로 형변환 가능한지 확인 
+    Child child = (Child) parent;
+    parent.study();
+}
+
+
+Parent parent = new Child();
+parent.field;  // Parent 클래스의 field값이 호출됨
+parent.method();  // Child 클래스의 오버라이딩된 method가 호출됨
+```
+
+### 추상 클래스
+
+자손 클래스에서 재정의해서 사용되므로 조상 클래스에서 구현이 무의미한 경우, 메서드의 선언부만 남기고 구현부는 세미콜론으로 대체하여 작성할 수 있다. 이런 클래스는 상속 전용이며 객체를 생성할 수 없다는 표기를 해줘야 하는데, 클래스 선언부에 abstract를 추가한다. 상속받은 abstract 메서드를 자식 클래스에서 재정의하지 않는 경우엔 자식 클래스에도 구현하지 않은 메서드가 있게 되는 것이므로 abstract 클래스가 되어야 한다. 이렇게 구현을 강제하는 추상클래스를 사용하면 프로그램의 안정성이 향상된다.

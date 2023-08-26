@@ -1,0 +1,88 @@
+---
+layout: post
+title:  Java 기초 - 상속
+date:   2023-07-21 19:31:29 +0900
+categories: Java
+---
+### 상속
+
+상속이란, 어떤 클래스의 특성을 그대로 갖는 새로운 클래스를 정의한 것이다. extends 키워드를 통해 다른 클래스로 멤버변수와 메소드를 상속하여 확장성과 재사용성을 늘릴 수 있게 된다. 물론 부모의 생성자와 초기화 블록은 상속되지 않는다. 
+
+```javascript
+public class Parent {
+    String name;
+    String age;
+    
+    public Parent(String name, int age){
+    	this.name = name;
+        this.age = age;
+    }
+    
+    public void eat() {
+    	System.out.println("냠냠");
+    }
+}
+
+public class Child extends Parent {  // Parent로부터 필드와 메서드를 상속받음
+    String father;  // 물려받은 필드 외에도 추가로 작성하여 활용 가능
+    
+    public Child(String name, int age, String father) {
+    	super(name, age);  // Parent(name, age)의 기능인 this.name = name; this.age=age;를 호출
+        this.fater = father;
+    }
+    
+    public void study() {  // 물려받은 메서드 외에도 추가로 작성하여 활용 가능
+    	System.out.println("열공");
+    }
+}
+
+Child ch = new Child("홍길동", 50, "홍상직");
+ch.study();
+```
+
+### 오버라이딩
+
+상위 클래스에서 상속받은 메서드는 자식 클래스에서 오버라이딩(재정의)할 수 도 있다. 메서드의 이름, 반환형, 매개변수 모두 동일해야 하고, 접근제어자 범위는 상위 클래스보다 좁을 수 없다. 예외 또한 조상보다 더 큰 예외를 던질 수 없다.
+
+```javascript
+public class Parent {
+
+    public void eat() {
+    	System.out.println("냠냠");
+    }
+}
+
+public class Child extends Parent {  
+
+    @Override 	// Child에서는 eat() 메서드를 재정의하여 사용 (Parent에서는 원래 정의대로 사용됨)
+    public void eat() { 
+    	System.out.println("꾸역꾸역");
+    }
+}
+```
+
+### Object 클래스
+
+가장 최상위 클래스로 모든 클래스의 조상이다. 따라서 Object의 멤버는 모든 클래스의 멤버가 된다. 그래서 객체를 문자열로 변경하는 toString() 메서드, 두 객체를 비교하는 equals() 메서드 등을 오버라이딩하여 변경할 수 있다.
+
+```javascript
+public class Person {
+    
+    public Child(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+    	return "Person [name=" + name + ", age=" + age + "]" 
+	// System.out.println(person.toString()); 이제 객체의 주소값이 아닌, 내용이 출력됨
+    }
+}
+```
+
+### final
+
+final 선언은 최종 상태로, 결코 수정될 수 없음을 나타낸다.
+
+클래스는 상속 금지, 메소드는 오버라이딩 금지, 변수는 상수화된다.
